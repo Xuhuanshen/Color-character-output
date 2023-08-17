@@ -88,3 +88,16 @@ void colorOut::out(string text, RGB textColor, RGB backgroundColor, bool Italic,
 	//	<< (automaticReset ? "\033[0m" : "")	//恢复默认输出样式
 	//	<< endl;
 }
+
+void colorOut::swapTextColorAndBackgroundColor()
+{
+	RGB oldTextcolor = defaultTextColor;
+	defaultTextColor = defaultBackgroundColor;
+	defaultBackgroundColor = oldTextcolor;
+}
+
+colorOut colorOut::operator<<(string text)
+{	
+	out(text, defaultTextColor, defaultBackgroundColor);
+	return *this;
+}

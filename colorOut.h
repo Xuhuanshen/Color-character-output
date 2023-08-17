@@ -29,5 +29,13 @@ public:
 	void out(string text, RGB textColor);
 	void out(string text, RGB textColor, RGB backgroundColor);
 	void out(string text, RGB textColor, RGB backgroundColor, bool Italic, bool Underline, bool Blink, bool Crossed_Out);
+
+
+	//功能
+	void swapTextColorAndBackgroundColor();//交换文本色和背景色
+
+
+	//重载
+	colorOut operator<<(string text);
 };
 
