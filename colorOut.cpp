@@ -75,7 +75,7 @@ void colorOut::out(string text, RGB textColor, RGB backgroundColor, bool Italic,
 	outBuffer += text;	//要输出的文本内容
 	outBuffer += (automaticReset ? "\033[0m" : "");	//恢复默认输出样式
 
-	cout << outBuffer << endl;
+	cout << outBuffer;
 
 	//cout << "\033[38;2;" << textColor.red << ";" << textColor.green << ";" << textColor.blue	//设置文本色
 	//	<< ";48;2;" << backgroundColor.red << ";" << backgroundColor.green << ";" << backgroundColor.blue	//设置背景色
