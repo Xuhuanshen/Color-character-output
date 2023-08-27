@@ -22,7 +22,9 @@ colorOut::colorOut(RGB defaultTextColor, RGB defaultBackgroundColor)//»ù±¾¹¹Ôì£¨
 	this->automaticReset = true;
 }
 
-colorOut::colorOut(RGB defaultTextColor, RGB defaultBackgroundColor, bool defaultItalic, bool defaultUnderline, bool defaultBlink, bool defaultCrossed_Out, bool automaticReset)//ÍêÈ«¹¹Ôì£¨ÎªËùÓĞÄ¬ÈÏÊôĞÔ¸³Öµ
+colorOut::colorOut(RGB defaultTextColor, RGB defaultBackgroundColor, 
+	bool defaultItalic, bool defaultUnderline, bool defaultBlink, bool defaultCrossed_Out, bool automaticReset)
+	//ÍêÈ«¹¹Ôì£¨ÎªËùÓĞÄ¬ÈÏÊôĞÔ¸³Öµ
 {
 	this->defaultTextColor = defaultTextColor;
 	this->defaultBackgroundColor = defaultBackgroundColor;
@@ -32,6 +34,99 @@ colorOut::colorOut(RGB defaultTextColor, RGB defaultBackgroundColor, bool defaul
 	this->defaultCrossed_Out = defaultCrossed_Out;
 	this->automaticReset = automaticReset;
 }
+
+colorOut::colorOut(const colorOut& oldColorOut)
+{
+	this->defaultTextColor = oldColorOut.defaultTextColor;
+	this->defaultBackgroundColor = oldColorOut.defaultBackgroundColor;
+	this->defaultItalic = oldColorOut.defaultItalic;
+	this->defaultUnderline = oldColorOut.defaultUnderline;
+	this->defaultBlink = oldColorOut.defaultBlink;
+	this->defaultCrossed_Out = oldColorOut.defaultCrossed_Out;
+	this->automaticReset = oldColorOut.automaticReset;
+}
+
+
+
+
+
+
+RGB colorOut::getDefaultTextColor()
+{
+	return this->defaultTextColor;
+}
+
+void colorOut::setDefaultTextColor(RGB newColor)
+{
+	this->defaultTextColor = newColor;
+	return;
+}
+
+RGB colorOut::getDefaultBackgroundColor()
+{
+	return this->defaultBackgroundColor;
+}
+
+void colorOut::setDefaultBackgroundColor(RGB newColor)
+{
+	this->defaultBackgroundColor = newColor;
+	return;
+}
+
+bool colorOut::getDefaultItalic()
+{
+	return this->defaultItalic;
+}
+
+void colorOut::setDefaultItalic(bool newSet)
+{
+	this->defaultItalic = newSet;
+	return;
+}
+
+bool colorOut::getDefaultUnderline()
+{
+	return this->defaultUnderline;
+}
+
+void colorOut::setDefaultUnderline(bool newSet)
+{
+	this->defaultUnderline = newSet;
+}
+
+bool colorOut::getDefaultBlink()
+{
+	return this->defaultBlink;
+}
+
+void colorOut::setDefaultBlink(bool newSet)
+{
+	this->defaultBlink = newSet;
+}
+
+bool colorOut::getDefaultCrossed_Out()
+{
+	return this->defaultCrossed_Out;
+}
+
+void colorOut::setDefaultCrossed_Out(bool newSet)
+{
+	this->defaultCrossed_Out = newSet;
+}
+
+bool colorOut::getAutomaticReset()
+{
+	return this->automaticReset;
+}
+
+void colorOut::setAutomaticReset(bool newSet)
+{
+	this->automaticReset = newSet;
+}
+
+
+
+
 
 void colorOut::out(string text)//»ù±¾Êä³ö£¨È«²¿Ä¬ÈÏ
 {
@@ -48,56 +143,76 @@ void colorOut::out(string text, RGB textColor, RGB backgroundColor)//ÉèÖÃÎÄ±¾É«º
 	out(text, textColor, defaultBackgroundColor, defaultItalic, defaultUnderline, defaultBlink, defaultCrossed_Out);
 }
 
-void colorOut::out(string text, RGB textColor, RGB backgroundColor, bool Italic, bool Underline, bool Blink, bool Crossed_Out)//ÉèÖÃËùÓĞ²ÎÊı
+void colorOut::out(string text, RGB textColor, RGB backgroundColor,
+	bool Italic, bool Underline, bool Blink, bool Crossed_Out)//ÉèÖÃËùÓĞ²ÎÊı
 {
-	//ÒÔÏÂÁ½ÖÖ·½·¨¾ù¿ÉÊµÏÖÊä³ö£¬ÉÏ·½·½·¨¸ü¿ì
+	outBuffer.clear();//Çå¿Õ»º³åÇø
 
-
-	string outBuffer = "";//Êä³ö»º³å
-
-	outBuffer += "\033[38;2;";//ÉèÖÃÎÄ±¾É«
-	outBuffer += to_string(textColor.red);
-	outBuffer += ";";
-	outBuffer += to_string(textColor.green);
-	outBuffer += ";";
-	outBuffer += to_string(textColor.blue);
-	outBuffer += ";48;2;";//ÉèÖÃ±³¾°É«
-	outBuffer += to_string(backgroundColor.red);
-	outBuffer += ";";
-	outBuffer += to_string(backgroundColor.green);
-	outBuffer += ";";
-	outBuffer += to_string(backgroundColor.blue);
-	outBuffer += (Italic ? ";3" : "");	//Ğ±Ìå
-	outBuffer += (Underline ? ";4" : "");	//ÏÂ»®Ïß
-	outBuffer += (Blink ? ";5" : "");	//ÉÁË¸
-	outBuffer += (Crossed_Out ? ";9" : "");	//É¾³ı±ê¼Ç
-	outBuffer += "m"; //½áÎ²
+	outBuffer += setOutStyle(textColor, backgroundColor, Italic, Underline, Blink, Crossed_Out);
 	outBuffer += text;	//ÒªÊä³öµÄÎÄ±¾ÄÚÈİ
 	outBuffer += (automaticReset ? "\033[0m" : "");	//»Ö¸´Ä¬ÈÏÊä³öÑùÊ½
 
-	cout << outBuffer;
-
-	//cout << "\033[38;2;" << textColor.red << ";" << textColor.green << ";" << textColor.blue	//ÉèÖÃÎÄ±¾É«
-	//	<< ";48;2;" << backgroundColor.red << ";" << backgroundColor.green << ";" << backgroundColor.blue	//ÉèÖÃ±³¾°É«
-	//	<< (Italic ? ";3" : "")	//Ğ±Ìå
-	//	<< (Underline ? ";4" : "")	//ÏÂ»®Ïß
-	//	<< (Blink ? ";5" : "")	//ÉÁË¸
-	//	<< (Crossed_Out ? ";9" : "")	//É¾³ı±ê¼Ç
-	//	<< "m" //½áÎ²
-	//	<< text	//ÒªÊä³öµÄÎÄ±¾ÄÚÈİ
-	//	<< (automaticReset ? "\033[0m" : "")	//»Ö¸´Ä¬ÈÏÊä³öÑùÊ½
-	//	<< endl;
+	cout << outBuffer;//Êä³ö
 }
 
 void colorOut::swapTextColorAndBackgroundColor()
 {
-	RGB oldTextcolor = defaultTextColor;
+	RGB oldTextColor = defaultTextColor;
 	defaultTextColor = defaultBackgroundColor;
-	defaultBackgroundColor = oldTextcolor;
+	defaultBackgroundColor = oldTextColor;
+}
+
+string colorOut::setOutStyle(RGB textColor = RGB(204, 204, 204), RGB backgroundColor = RGB(12, 12, 12),
+	bool Italic = false, bool Underline = false, bool Blink = false, bool Crossed_Out = false)
+{
+	string buffer;
+
+	buffer += "\033[38;2;";//ÉèÖÃÎÄ±¾É«
+	buffer += to_string(textColor.red);
+	buffer += ";";
+	buffer += to_string(textColor.green);
+	buffer += ";";
+	buffer += to_string(textColor.blue);
+	buffer += ";48;2;";//ÉèÖÃ±³¾°É«
+	buffer += to_string(backgroundColor.red);
+	buffer += ";";
+	buffer += to_string(backgroundColor.green);
+	buffer += ";";
+	buffer += to_string(backgroundColor.blue);
+	buffer += (Italic ? ";3" : "");	//Ğ±Ìå
+	buffer += (Underline ? ";4" : "");	//ÏÂ»®Ïß
+	buffer += (Blink ? ";5" : "");	//ÉÁË¸
+	buffer += (Crossed_Out ? ";9" : "");	//É¾³ı±ê¼Ç
+	buffer += "m"; //½áÎ²
+
+	return buffer;
+}
+
+void colorOut::reset()
+{
+	cout << "\033[0m";//»Ö¸´Ä¬ÈÏÑùÊ½
+	this->defaultTextColor = RGB(204, 204, 204);//Ä¬ÈÏÑÕÉ«À´×ÔPowerShell
+	this->defaultBackgroundColor = RGB(12, 12, 12);//Ä¬ÈÏÑÕÉ«À´×ÔPowerShell
+	this->defaultItalic = false;
+	this->defaultUnderline = false;
+	this->defaultBlink = false;
+	this->defaultCrossed_Out = false;
+	this->automaticReset = true;
 }
 
 colorOut colorOut::operator<<(string text)
-{	
+{
 	out(text, defaultTextColor, defaultBackgroundColor);
 	return *this;
+}
+
+void colorOut::operator=(const colorOut& oldColorOut)
+{
+	this->defaultTextColor = oldColorOut.defaultTextColor;
+	this->defaultBackgroundColor = oldColorOut.defaultBackgroundColor;
+	this->defaultItalic = oldColorOut.defaultItalic;
+	this->defaultUnderline = oldColorOut.defaultUnderline;
+	this->defaultBlink = oldColorOut.defaultBlink;
+	this->defaultCrossed_Out = oldColorOut.defaultCrossed_Out;
+	this->automaticReset = oldColorOut.automaticReset;
 }
